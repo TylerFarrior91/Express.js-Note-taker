@@ -1,13 +1,15 @@
 const express = require('express');
-const fs = require('fs');
+const { readFromFile,
+    readAndAppend,
+    readAndDelete } = require("./utils/helpers")
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware to parse JSON data
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }))
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
@@ -22,28 +24,18 @@ app.get('*', (req, res) => {
 
 // API Routes
 app.get('/api/notes', (req, res) => {
-    const db = require("./db/db.json")
-    // Read the notes from the db.json file and send them as JSON
-    const notes = JSON.parse(db);
-    console.log("kjashd")
-    res.json(notes);
+    readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
 });
 
 app.post('/api/notes', (req, res) => {
     const newNote = req.body;
-    const notes = JSON.parse(fs.readFileSync("./db/db.json", "utf-8"));
 
     // Generate a unique ID for the new note (you can use a package like 'uuid' for this)
     // Function to generate a unique ID (for example, using the 'uuid' package)
     newNote.id = Math.floor(Math.random() * 100000000000)
 
-    // Add the new note to the array of notes
-    notes.push(newNote);
-
-    // Write the updated notes back to the db.json file
-    fs.writeFileSync(path.join(__dirname, 'db', 'db.json'), JSON.stringify(notes, null, 2));
-
-    res.json(newNote);
+    readAndAppend(newNote, "./db/db.json")
+    res.json(newNote)
 });
 
 // Bonus: Delete Route
