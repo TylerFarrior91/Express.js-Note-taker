@@ -14,6 +14,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'));
 
 // HTML Routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'notes.html'));
 });
@@ -36,27 +40,8 @@ app.post('/api/notes', (req, res) => {
 
 // Bonus: Delete Route
 app.delete('/api/notes/:id', (req, res) => {
-    const noteId = req.params.id;
-    const notes = JSON.parse(fs.readFileSync(path.join(__dirname, 'db', 'db.json'), 'utf8'));
-    
-    // Find the index of the note with the given id
-    const noteIndex = notes.findIndex((note) => note.id === noteId);
-    
-    if (noteIndex !== -1) {
-        // Remove the note from the array
-        notes.splice(noteIndex, 1);
-        
-        // Write the updated notes back to the db.json file
-        fs.writeFileSync(path.join(__dirname, 'db', 'db.json'), JSON.stringify(notes, null, 2));
-
-        res.sendStatus(204); // No Content
-    } else {
-        res.sendStatus(404); // Not Found
-    }
-});
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    readAndDelete(req.params.id, "./db/db.json")
+    res.json({ok: true})
 });
 
 // Start the server
