@@ -28,7 +28,7 @@ const readAndDelete = (id, file) => {
         } else {
             const parsedData = JSON.parse(data);
             const filteredData = parsedData.filter((note) => {
-                return note.id !== id;
+                return note.id != id;
             });
 
             writeToFile(file, filteredData);

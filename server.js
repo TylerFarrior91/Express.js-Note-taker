@@ -41,6 +41,7 @@ app.post('/api/notes', (req, res) => {
 // Bonus: Delete Route
 app.delete('/api/notes/:id', (req, res) => {
     readAndDelete(req.params.id, "./db/db.json")
+    console.log(req.params.id)
     res.json({ok: true})
 });
 
