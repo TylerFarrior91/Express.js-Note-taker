@@ -22,9 +22,10 @@ app.get('*', (req, res) => {
 
 // API Routes
 app.get('/api/notes', (req, res) => {
+    const db = require("./db/db.json")
     // Read the notes from the db.json file and send them as JSON
-    const notes = JSON.parse(fs.readFileSync(path.join(__dirname, 'db', 'db.json'), 'utf8'));
-    console.log(notes)
+    const notes = JSON.parse(db);
+    console.log("kjashd")
     res.json(notes);
 });
 
