@@ -12,7 +12,7 @@ This project deals with Express.js (server) saving and deleting notes within the
 ## Installation
 "Git Clone"
 ## Usage
-use "NPM Install" then run "NPM START
+use "NPM Install" then run "NPM START"
 ## Credits
 Tyler Farrior
 
